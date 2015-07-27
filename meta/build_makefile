@@ -1,0 +1,13 @@
+all: get_certstrap build upload clean
+
+get_certstrap:
+	git clone https://github.com/square/certstrap /opt/certstrap
+
+build: /opt/certstrap
+	cd /opt/certstrap && ./build
+
+upload: /opt/certstrap/bin/certstrap
+	curl -T /opt/certstrap/bin/certstrap -u${BINTRAY_USER}:${BINTRAY_TOKEN} "https://api.bintray.com/content/${BINTRAY_USER}/${BINTRAY_REPO}/certstrap/latest/certstrap?publish=1"
+
+clean:
+	rm -rf /opt/certstrap
